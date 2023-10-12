@@ -1,18 +1,20 @@
 "use client"
 
-import { addImage, findImages } from "@/app/actions"
+import { addImage } from "@/app/actions"
 // @ts-ignore
 import { experimental_useFormState as useFormState } from 'react-dom'
 // @ts-ignore
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
+import { Button } from "./ui/button"
+import { Input } from "./ui/input"
 
-function SubmitButton() {
+const SubmitButton = () => {
   const { pending } = useFormStatus()
 
   return (
-    <button type="submit" aria-disabled={pending}>
+    <Button type="submit" aria-disabled={pending} className="inline-block">
       Upload
-    </button>
+    </Button>
   )
 }
 
@@ -20,8 +22,8 @@ export const UploadForm = () => {
   const [state, formAction] = useFormState(addImage, null);
 
   return (
-    <form action={formAction}>
-      <input type="file" placeholder="Search images" id="fileAttachment" name="fileAttachment" />
+    <form action={formAction} className="flex flex-row">
+      <Input type="file" placeholder="Search images" id="fileAttachment" name="fileAttachment" className="mr-4" />
       <SubmitButton />
     </form>
   )
