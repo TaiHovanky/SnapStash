@@ -1,16 +1,23 @@
 import ImageGrid from '@/components/image-grid';
-import { SearchForm } from '@/components/search-form';
-import { Skeleton } from '@/components/ui/skeleton';
-import { UploadForm } from '@/components/upload-form';
+import UploadForm from '@/components/upload-form';
+import SearchForm from '@/components/search-form';
 
-export default function Home({ searchParams }: { searchParams: { search?: string }}) {
+type HomeProps = {
+  searchParams: {
+    search?: string
+  }
+}
+
+const Home = ({ searchParams }: HomeProps) => {
   return (
     <main className='mx-8 pb-8 min-h-screen'>
       <div className='flex flex-col sm:flex-row justify-between my-8 gap-4'>
-        <SearchForm />
+        <SearchForm search={searchParams?.search} />
         <UploadForm />
       </div>
-      <ImageGrid searchParams={searchParams} />
+      <ImageGrid search={searchParams?.search} />
     </main>
   );
 }
+
+export default Home;

@@ -1,29 +1,12 @@
 "use client"
 
-import { addImage } from "@/app/actions"
-// @ts-ignore
-import { experimental_useFormStatus as useFormStatus } from 'react-dom'
-import { Button } from "./ui/button"
+import SubmitButton from "./submit-button"
 import { Input } from "./ui/input"
+import { addImage } from "@/app/actions"
 import { useShowToast } from "@/hooks/useShowToast"
 import { ServerActionResult } from "@/types/server-action-result.type"
 
-const SubmitButton = () => {
-  const { pending } = useFormStatus()
-
-  return (
-    <Button
-      type="submit"
-      aria-disabled={pending}
-      className="inline-block"
-      disabled={pending}
-    >
-      Upload
-    </Button>
-  )
-}
-
-export const UploadForm = () => {
+const UploadForm = () => {
   const { showToast } = useShowToast();
 
   const uploadFormAction = async (formData: FormData) => {
@@ -43,3 +26,5 @@ export const UploadForm = () => {
     </form>
   )
 }
+
+export default UploadForm;

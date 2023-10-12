@@ -1,12 +1,16 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export const SearchForm = () => {
-  const [fileName, setFileName] = useState('' as string);
+type SearchFormProps = {
+  search?: string
+}
+
+const SearchForm = ({ search }: SearchFormProps) => {
+  const [fileName, setFileName] = useState(search || '' as string);
   const router: AppRouterInstance = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +28,10 @@ export const SearchForm = () => {
         placeholder="Search images..."
         onChange={handleChange}
         name="search"
+        value={fileName}
       />
     </form>
   )
 }
+
+export default SearchForm;

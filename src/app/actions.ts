@@ -1,14 +1,20 @@
 "use server"
 
 import { z } from 'zod';
-import db from '../db/connection';
 import { revalidatePath } from 'next/cache';
 import { v4 as uuidv4 } from 'uuid';
-import { storeFile } from '@/utils/file-storage';
+import db from '../db/connection';
+import { deleteFileFromS3, storeFile } from '@/utils/file-storage';
 import { ServerActionResult } from '@/types/server-action-result.type';
 import { ImageMetadata } from '@/types/image.type';
 
-export async function addImage(formData: FormData): Promise<ServerActionResult> {
+/**
+ * Allows the user to upload an image. Saves image metadata to the database and BLOB to S3 bucket
+ * @param {FormData} formData contains file attachment
+ * @returns {Promise<ServerActionResult>} object containing success of the server action
+ */
+export const addImage = async (formData: FormData): Promise<ServerActionResult> => {
+  // use zod to validate the formData
   const schema = z.object({
     fileAttachment: z.any(),
   });
@@ -27,14 +33,16 @@ export async function addImage(formData: FormData): Promise<ServerActionResult> 
       };
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer:Buffer = Buffer.from(bytes);
+    // Store image metadata in MySQL database
     const fileId: string = uuidv4();
-
     await db('image').insert({
       image_id: fileId,
       file_name: file.name
     });
+
+    // Store image in S3 bucket
+    const bytes = await file.arrayBuffer();
+    const buffer:Buffer = Buffer.from(bytes);
     await storeFile(buffer, fileId);
 
     revalidatePath('/');
@@ -45,7 +53,12 @@ export async function addImage(formData: FormData): Promise<ServerActionResult> 
   }
 }
 
-export async function findImages(searchTerm: string): Promise<ImageMetadata[] | ServerActionResult> {
+/**
+ * Gets a list of images. If no search term provided, gets all images. Otherwise filters by search term
+ * @param {string} searchTerm File name that the user was searching for
+ * @returns {Promise<ServerActionResult>} object containing success of the server action
+ */
+export const findImages = async (searchTerm: string): Promise<ImageMetadata[] | ServerActionResult> => {
   const schema = z.object({
     fileName: z.string(),
   });
@@ -61,10 +74,15 @@ export async function findImages(searchTerm: string): Promise<ImageMetadata[] | 
   }
 }
 
-
-export async function deleteImage(imgId: string): Promise<ServerActionResult> {
+/**
+ * Deletes the image from the database and S3 bucket
+ * @param {string} imgId id of the image to be deleted
+ * @returns {Promise<ServerActionResult>} object containing success of the server action
+ */
+export const deleteImage = async (imgId: string): Promise<ServerActionResult> => {
   try {
     await db('image').del().where('image_id', imgId);
+    await deleteFileFromS3(imgId);
     revalidatePath('/');
     return { error: false, title: "Deleted image successfully" };
   } catch (err) {
