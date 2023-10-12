@@ -21,6 +21,7 @@ const UploadForm = () => {
         id="fileAttachment"
         name="fileAttachment"
         className="mr-4 cursor-pointer"
+        accept=".png, .jpg, .jpeg, .raw, .tiff, .bmp, .svg, .webp"
       />
       <SubmitButton />
     </form>
