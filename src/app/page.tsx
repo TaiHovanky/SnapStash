@@ -1,5 +1,6 @@
 import ImageGrid from '@/components/image-grid';
 import { SearchForm } from '@/components/search-form';
+import { Skeleton } from '@/components/ui/skeleton';
 import { UploadForm } from '@/components/upload-form';
 
 export default function Home({ searchParams }: { searchParams: { search?: string }}) {
@@ -11,5 +12,5 @@ export default function Home({ searchParams }: { searchParams: { search?: string
       </div>
       <ImageGrid searchParams={searchParams} />
     </main>
-  )
+  );
 }

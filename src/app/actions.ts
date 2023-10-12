@@ -48,7 +48,7 @@ export async function addImage(formData: FormData): Promise<ServerActionResult> 
 export async function findImages(searchTerm: string): Promise<ImageMetadata[] | ServerActionResult> {
   const schema = z.object({
     fileName: z.string(),
-  })
+  });
   const data = schema.parse({
     fileName: searchTerm
   });
