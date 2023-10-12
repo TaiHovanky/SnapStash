@@ -3,10 +3,11 @@
 import { useRouter } from "next/navigation"
 import { useState } from "react";
 import { Input } from "./ui/input";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export const SearchForm = () => {
   const [fileName, setFileName] = useState('' as string);
-  const router = useRouter();
+  const router: AppRouterInstance = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFileName(e.target.value);

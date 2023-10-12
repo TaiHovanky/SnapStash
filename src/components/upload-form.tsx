@@ -2,27 +2,37 @@
 
 import { addImage } from "@/app/actions"
 // @ts-ignore
-import { experimental_useFormState as useFormState } from 'react-dom'
-// @ts-ignore
 import { experimental_useFormStatus as useFormStatus } from 'react-dom'
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
+import { useShowToast } from "@/hooks/useShowToast"
+import { ServerActionResult } from "@/types/server-action-result.type"
 
 const SubmitButton = () => {
   const { pending } = useFormStatus()
 
   return (
-    <Button type="submit" aria-disabled={pending} className="inline-block">
+    <Button
+      type="submit"
+      aria-disabled={pending}
+      className="inline-block"
+      disabled={pending}
+    >
       Upload
     </Button>
   )
 }
 
 export const UploadForm = () => {
-  const [state, formAction] = useFormState(addImage, null);
+  const { showToast } = useShowToast();
+
+  const uploadFormAction = async (formData: FormData) => {
+    const result: ServerActionResult = await addImage(formData);
+    showToast(result);
+  }
 
   return (
-    <form action={formAction} className="flex flex-row">
+    <form action={uploadFormAction} className="flex flex-row">
       <Input
         type="file"
         id="fileAttachment"
