@@ -30,6 +30,7 @@ export async function addImage(prevState: any, formData: FormData) {
       file_name: file.name
     });
     await storeFile(buffer, fileId);
+    revalidatePath('/');
     return { message: "Saved successfully" };
   } catch (err) {
     console.log('add image err', err);

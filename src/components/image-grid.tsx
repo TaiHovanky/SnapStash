@@ -16,10 +16,9 @@ const ImageGrid = async ({ searchParams }: { searchParams: { search?: string }  
               alt={`pic-${index}`}
               width={600}
               height={550}
-              // style={{objectFit:"cover"}}
-              className="aspect-w-16 aspect-h-9 max-h-[550px]"
-              // className="h-full w-full object-cover object-center group-hover:opacity-75 aspect-square"
+              className="aspect-w-16 aspect-h-9 max-h-[550px] relative"
             />
+            <DeleteButton imgId={imgFile.image_id} />
           </div>
         </div>
       ))}

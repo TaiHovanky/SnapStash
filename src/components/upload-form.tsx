@@ -23,7 +23,12 @@ export const UploadForm = () => {
 
   return (
     <form action={formAction} className="flex flex-row">
-      <Input type="file" placeholder="Search images" id="fileAttachment" name="fileAttachment" className="mr-4" />
+      <Input
+        type="file"
+        id="fileAttachment"
+        name="fileAttachment"
+        className="mr-4 cursor-pointer"
+      />
       <SubmitButton />
     </form>
   )

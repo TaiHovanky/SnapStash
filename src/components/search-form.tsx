@@ -18,7 +18,12 @@ export const SearchForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Input type="text" placeholder="Search images" onChange={handleChange} name="search" />
+      <Input
+        type="text"
+        placeholder="Search images..."
+        onChange={handleChange}
+        name="search"
+      />
     </form>
   )
 }

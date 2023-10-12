@@ -2,6 +2,7 @@
 
 import { deleteImage } from "@/app/actions";
 import { Button } from "./ui/button";
+import { Trash2 } from "lucide-react";
 
 const DeleteButton = ({ imgId }: { imgId: string }) => {
   const handleDeleteClick = async () => {
@@ -9,8 +10,8 @@ const DeleteButton = ({ imgId }: { imgId: string }) => {
   }
 
   return (
-    <Button type="submit" onClick={handleDeleteClick}>
-      Delete
+    <Button size="icon" className="absolute z-30 top-0 right-0" onClick={handleDeleteClick}>
+      <Trash2 className="h-6 w-6" />
     </Button>
   )
 }
