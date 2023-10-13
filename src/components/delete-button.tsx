@@ -15,12 +15,8 @@ const DeleteButton = ({ imgId }: { imgId: string }) => {
   const handleDeleteClick = async () => {
     setPending(true);
     const result: ServerActionResult = await deleteImage(imgId);
+    setPending(false);
     showToast(result);
-
-    if (result.error) {
-      // If the delete action fails, I need to reset the pending state
-      setPending(false);
-    }
   }
 
   return (
