@@ -9,6 +9,7 @@ const SubmitButton = () => {
     <Button
       type="submit"
       aria-disabled={pending}
+      aria-label='Upload image'
       className="inline-block"
       disabled={pending}
     >

@@ -25,6 +25,7 @@ const SearchForm = ({ search }: SearchFormProps) => {
     <form onSubmit={handleSubmit}>
       <Input
         type="text"
+        aria-label="Search images by name"
         placeholder="Search images..."
         onChange={handleChange}
         name="search"

@@ -22,6 +22,8 @@ const ImageGrid = async ({ search }: ImageGridProps) => {
               alt={`pic-${index}`}
               width={600}
               height={550}
+              placeholder="blur"
+              blurDataURL={`${process.env.NEXT_PUBLIC_AWS_BUCKET_URL}/${imgFile.image_id}`}
               className="aspect-w-16 aspect-h-9 h-auto w-auto sm:w-full relative"
             />
             <DeleteButton imgId={imgFile.image_id} />

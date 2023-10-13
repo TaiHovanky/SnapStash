@@ -19,6 +19,7 @@ const UploadForm = () => {
       <Input
         type="file"
         id="fileAttachment"
+        aria-label="Upload image"
         name="fileAttachment"
         className="mr-4 cursor-pointer"
         accept=".png, .jpg, .jpeg, .raw, .tiff, .bmp, .svg, .webp"
