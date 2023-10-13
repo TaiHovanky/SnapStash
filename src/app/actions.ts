@@ -8,6 +8,8 @@ import { deleteFileFromS3, storeFile } from '@/utils/file-storage';
 import { ServerActionResult } from '@/types/server-action-result.type';
 import { ImageMetadata } from '@/types/image.type';
 
+const PAGE_SIZE = 10;
+
 /**
  * Allows the user to upload an image. Saves image metadata to the database and BLOB to S3 bucket
  * @param {FormData} formData contains file attachment
@@ -56,9 +58,10 @@ export const addImage = async (formData: FormData): Promise<ServerActionResult> 
 /**
  * Gets a list of images. If no search term provided, gets all images. Otherwise filters by search term
  * @param {string} searchTerm File name that the user was searching for
+ * @param {number} pageNumber Page number of the images to be retrieved
  * @returns {Promise<ServerActionResult>} object containing success of the server action
  */
-export const findImages = async (searchTerm: string): Promise<ImageMetadata[] | ServerActionResult> => {
+export const findImages = async (searchTerm: string, pageNumber: number): Promise<ImageMetadata[] | ServerActionResult> => {
   const schema = z.object({
     fileName: z.string(),
   });
@@ -67,7 +70,11 @@ export const findImages = async (searchTerm: string): Promise<ImageMetadata[] | 
   });
 
   try {
-    return await db('image').select().where('file_name', 'like', `%${data.fileName}%`);
+    return await db('image')
+      .select()
+      .where('file_name', 'like', `%${data.fileName}%`)
+      .limit(PAGE_SIZE)
+      .offset(pageNumber * PAGE_SIZE);
   } catch (err) {
     console.log('find images err', err);
     return { error: true, title: 'Image search failed' };

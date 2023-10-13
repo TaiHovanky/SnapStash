@@ -1,16 +1,41 @@
+"use client"
+
 import Image from "next/image";
 import DeleteButton from "./delete-button";
 import EmptyGallery from "./empty-gallery";
 import { findImages } from "@/app/actions";
 import { ImageMetadata } from "@/types/image.type";
 import { ServerActionResult } from "@/types/server-action-result.type";
+import { useEffect, useState } from "react";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 type ImageGridProps = {
   search?: string
 }
 
-const ImageGrid = async ({ search }: ImageGridProps) => {
-  const images: ImageMetadata[] | ServerActionResult = await findImages(search || '');
+const ImageGrid = ({ search }: ImageGridProps) => {
+  const [images, setImages] = useState<ImageMetadata[]>([]);
+
+  const { debouncedScrollHandler } = useInfiniteScroll(search || '', images, setImages);
+
+  useEffect(() => {
+    // Get the first page of images
+    const getImages = async () => {
+      const images: ImageMetadata[] | ServerActionResult = await findImages(search || '', 0);
+      if (Array.isArray(images)) {
+        setImages(images as ImageMetadata[]);
+      }
+    }
+    getImages();
+
+    // Add the scroll listener
+    window.addEventListener('scroll', debouncedScrollHandler);
+
+    // Clean out the listener
+    return () => {
+      window.removeEventListener('scroll', debouncedScrollHandler);
+    }
+  }, [search]);
 
   return (
     <div className='w-full grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4'>
